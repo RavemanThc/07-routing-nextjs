@@ -10,3 +10,7 @@ export type NotesResponse = {
   notes: Note[];
   totalPages: number;
 };
+export type Tag = {
+  id: string;
+  name: string;
+};
