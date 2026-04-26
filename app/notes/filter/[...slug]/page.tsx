@@ -10,16 +10,18 @@ import { fetchNotes } from "@/lib/api";
 export default async function NotesPage({
   params,
 }: {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }) {
+  const { slug } = await params;
+
   const queryClient = new QueryClient();
 
-  const tag = params.slug?.[0] ?? "all";
+  const tag = slug?.[0] ?? "all";
   const search = tag === "all" ? "" : tag;
 
   await queryClient.prefetchQuery({
-    queryKey: ["notes", tag], // ✅ важливо
-    queryFn: () => fetchNotes(search, 1, tag), // ✅ важливо
+    queryKey: ["notes", tag],
+    queryFn: () => fetchNotes(search, 1, tag),
   });
 
   return (
