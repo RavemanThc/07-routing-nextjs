@@ -27,7 +27,11 @@ export default function NotesClient() {
     setPage(1);
   }, 500);
 
-  const { data, isLoading, error } = useQuery<NotesResponse>({
+  const {
+    data = { notes: [], totalPages: 0 },
+    isLoading,
+    error,
+  } = useQuery<NotesResponse>({
     queryKey: ["notes", page, search],
     queryFn: () => fetchNotes(search, page),
     placeholderData: (prev) => prev,
@@ -55,13 +59,13 @@ export default function NotesClient() {
     <div className={css.app}>
       {/* 🔹 HEADER */}
       <header className={css.toolbar}>
-        <SearchBox onSearch={debouncedSearch} />
+        <SearchBox value={search} onChange={debouncedSearch} />
 
         {data.totalPages > 1 && (
           <Pagination
-            page={page}
-            totalPages={data.totalPages}
-            onPageChange={setPage}
+            currentPage={page}
+            pageCount={data.totalPages}
+            onPageChange={(page) => setPage(page)}
           />
         )}
 
@@ -77,7 +81,10 @@ export default function NotesClient() {
       {/* 🔹 MODAL */}
       {isOpen && (
         <Modal onClose={() => setIsOpen(false)}>
-          <NoteForm onSubmit={createMutation.mutate} />
+          <NoteForm
+            onClose={() => setIsOpen(false)}
+            onSubmit={(data) => createMutation.mutate(data)}
+          />
         </Modal>
       )}
     </div>

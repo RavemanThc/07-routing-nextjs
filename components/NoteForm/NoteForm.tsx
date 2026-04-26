@@ -3,13 +3,13 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote } from "@/lib/api";
+import { createNote, CreateNotePayload } from "@/lib/api";
 
 import css from "./NoteForm.module.css";
 
-// ✅ 1. НОРМАЛЬНЫЙ ТИП ПРОПСОВ
 interface NoteFormProps {
   onClose: () => void;
+  onSubmit: (data: CreateNotePayload) => void;
 }
 
 interface FormValues {
@@ -18,20 +18,15 @@ interface FormValues {
   tag: string;
 }
 
-// ✅ 2. ВАЛИДАЦИЯ
 const schema = Yup.object({
-  title: Yup.string()
-    .min(3)
-    .max(50)
-    .required("Required"),
+  title: Yup.string().min(3).max(50).required("Required"),
   content: Yup.string().max(500),
   tag: Yup.string().required("Required"),
 });
 
-export default function NoteForm({ onClose }: NoteFormProps) {
+export default function NoteForm({ onClose, onSubmit }: NoteFormProps) {
   const queryClient = useQueryClient();
 
-  // ✅ 3. TANSTACK MUTATION
   const mutation = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
@@ -50,7 +45,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
     <Formik
       initialValues={initialValues}
       validationSchema={schema}
-      onSubmit={(values) => mutation.mutate(values)}
+      onSubmit={(values) => onSubmit(values)}
     >
       <Form className={css.form}>
         {/* TITLE */}
@@ -88,11 +83,7 @@ export default function NoteForm({ onClose }: NoteFormProps) {
         {/* ACTIONS */}
         <div className={css.actions}>
           {/* CANCEL */}
-          <button
-            type="button"
-            className={css.cancelButton}
-            onClick={onClose}
-          >
+          <button type="button" className={css.cancelButton} onClick={onClose}>
             Cancel
           </button>
 

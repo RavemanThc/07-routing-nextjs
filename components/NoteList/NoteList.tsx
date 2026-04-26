@@ -9,9 +9,10 @@ import css from "./NoteList.module.css";
 
 interface NoteListProps {
   notes: Note[];
+  onDelete: (id: string) => void;
 }
 
-export default function NoteList({ notes }: NoteListProps) {
+export default function NoteList({ notes, onDelete }: NoteListProps) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -37,7 +38,6 @@ export default function NoteList({ notes }: NoteListProps) {
             <Link href={`/notes/${note.id}`} className={css.details}>
               View details
             </Link>
-
 
             <button
               className={css.button}
