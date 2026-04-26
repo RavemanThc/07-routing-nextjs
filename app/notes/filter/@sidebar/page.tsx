@@ -1,10 +1,9 @@
-import { getTags } from "@/lib/api";
 import Link from "next/link";
 import css from "./Sidebar.module.css";
 
-const Sidebar = async () => {
-  const tags = await getTags();
+const tags = ["Work", "Personal", "Shopping", "Meeting", "Todo"];
 
+export default function SidebarNotes() {
   return (
     <ul className={css.menuList}>
       <li className={css.menuItem}>
@@ -14,14 +13,12 @@ const Sidebar = async () => {
       </li>
 
       {tags.map((tag) => (
-        <li key={tag.id} className={css.menuItem}>
-          <Link href={`/notes/filter/${tag.id}`} className={css.menuLink}>
-            {tag.name}
+        <li key={tag} className={css.menuItem}>
+          <Link href={`/notes/filter/${tag}`} className={css.menuLink}>
+            {tag}
           </Link>
         </li>
       ))}
     </ul>
   );
-};
-
-export default Sidebar;
+}

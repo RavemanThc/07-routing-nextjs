@@ -1,13 +1,13 @@
 import { fetchNotes } from "@/lib/api";
 
-export default async function FilteredNotesPage({
+export default async function FilterPage({
   params,
 }: {
   params: { tag: string };
 }) {
   const tag = params.tag;
 
-  const search = tag === "all" ? "" : tag.toLowerCase();
+  const search = tag === "all" ? "" : tag;
 
   const data = await fetchNotes(search, 1);
 
