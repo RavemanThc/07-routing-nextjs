@@ -3,9 +3,11 @@ import { fetchNotes } from "@/lib/api";
 export default async function FilterPage({
   params,
 }: {
-  params: { tag: string };
+  params: { slug: string[] };
 }) {
-  const tag = params.tag;
+  const slug = params.slug;
+
+  const tag = slug?.[0] ?? "all";
 
   const search = tag === "all" ? "" : tag;
 
