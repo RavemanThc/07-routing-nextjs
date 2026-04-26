@@ -1,17 +1,14 @@
 type Props = {
   children: React.ReactNode;
   sidebar: React.ReactNode;
-  modal: React.ReactNode;
 };
 
-const NotesLayout = ({ children, sidebar, modal }: Props) => {
+export default function NotesLayout({ children, sidebar }: Props) {
   return (
     <section>
-      <div>{children}</div>
-      <div>{modal}</div>
-      <div>{sidebar}</div>
+      <aside>{sidebar}</aside>
+
+      <main>{children}</main>
     </section>
   );
-};
-
-export default NotesLayout;
+}

@@ -3,20 +3,28 @@ import {
   dehydrate,
   HydrationBoundary,
 } from "@tanstack/react-query";
+
 import NotesClient from "./Notes.client";
 import { fetchNotes } from "@/lib/api";
 
-export default async function NotesPage() {
+export default async function NotesPage({
+  params,
+}: {
+  params: { slug: string[] };
+}) {
   const queryClient = new QueryClient();
 
+  const tag = params.slug?.[0] ?? "all";
+  const search = tag === "all" ? "" : tag;
+
   await queryClient.prefetchQuery({
-    queryKey: ["notes"],
-    queryFn: () => fetchNotes(),
+    queryKey: ["notes", tag], // ✅ важливо
+    queryFn: () => fetchNotes(search, 1, tag), // ✅ важливо
   });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotesClient />
+      <NotesClient tag={tag} />
     </HydrationBoundary>
   );
 }

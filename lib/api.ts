@@ -19,12 +19,14 @@ export interface FetchNotesResponse {
 export const fetchNotes = async (
   search = "",
   page = 1,
+  tag = "",
 ): Promise<FetchNotesResponse> => {
   const { data } = await instance.get<FetchNotesResponse>("/notes", {
     params: {
       page,
       perPage: 12,
       search,
+      tag: tag || undefined, // ❗ важливо: не відправляємо пустий
     },
   });
 
@@ -51,7 +53,7 @@ export const deleteNote = async (id: string): Promise<Note> => {
   const { data } = await instance.delete<Note>(`/notes/${id}`);
   return data;
 };
-export const getTags = async () => {
-  const res = await axios<Tag[]>("/categories");
-  return res.data;
+export const getTags = async (): Promise<Tag[]> => {
+  const { data } = await instance.get<Tag[]>("/categories");
+  return data;
 };
