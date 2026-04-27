@@ -21,12 +21,14 @@ export const fetchNotes = async (
   page = 1,
   tag = "",
 ): Promise<FetchNotesResponse> => {
-  const { data } = await instance.get<FetchNotesResponse>("/notes", {
+  const normalizedTag = tag === "all" ? "" : tag;
+
+  const { data } = await instance.get("/notes", {
     params: {
       page,
       perPage: 12,
       search,
-      tag: tag || undefined, // ❗ важливо: не відправляємо пустий
+      tag: normalizedTag || undefined,
     },
   });
 
