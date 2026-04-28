@@ -19,11 +19,11 @@ export interface FetchNotesResponse {
 export const fetchNotes = async (
   search = "",
   page = 1,
-  tag = "",
+  tag?: Tag["name"],
 ): Promise<FetchNotesResponse> => {
   const normalizedTag = tag === "all" ? "" : tag;
 
-  const { data } = await instance.get("/notes", {
+  const { data } = await instance.get<FetchNotesResponse>("/notes", {
     params: {
       page,
       perPage: 12,
